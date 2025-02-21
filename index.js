@@ -40,6 +40,11 @@ async function run() {
       res.send(result);
     })
 
+    app.get("/users", async(req, res) => {
+      const result = await userCollection.find().toArray();
+      res.send(result);
+    })
+
     await client.connect();
     
     // await client.db("admin").command({ ping: 1 });
