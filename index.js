@@ -47,6 +47,14 @@ async function run() {
       res.send(result);
     })
 
+    app.get('/tasks/:email', async(req, res) => {
+      const { email } = req.params;
+      const result = await taskCollection.find({author: email}).toArray();
+      res.send(result);
+    })
+
+    
+
     await client.connect();
     
     // await client.db("admin").command({ ping: 1 });
