@@ -7,7 +7,14 @@ const app = express();
 const port = process.env.port || 3000;
 
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "https://task-management-sajmul.web.app",
+      "http://localhost:5173",
+    ],
+  })
+);
 
 
 const uri =
@@ -64,8 +71,31 @@ async function run() {
       res.send(result);
     })
 
+    app.get('/task/:id', async(req, res) => {
+      const { id } = req.params;
+      const query = { _id: new ObjectId(id) };
+      const result = await taskCollection.findOne(query);
+      res.send(result);
+    })
+
+    app.put('/task/:id', async(req, res) => {
+      const { id } = req.params;
+      const query = { _id: new ObjectId(id) };
+      const data = req.body;
+      const updatedData = {
+        $set: data
+      }
+
+      const result = await taskCollection.updateOne(query, updatedData);
+      res.send(result);
+    })
     
-    
+    app.delete('/task/:id', async(req, res) => {
+      const { id } = req.params;
+      const query = { _id: new ObjectId(id) };
+      const result = await taskCollection.deleteOne(query);
+      res.send(result);
+    })
 
     await client.connect();
     
