@@ -26,6 +26,7 @@ async function run() {
   try {
     const db = client.db("tasks");
     const userCollection = db.collection("users");
+    const taskCollection = db.collection('tasks');
 
     app.post("/user/:email", async(req, res) => {
       const data = req.body;
@@ -40,8 +41,9 @@ async function run() {
       res.send(result);
     })
 
-    app.get("/users", async(req, res) => {
-      const result = await userCollection.find().toArray();
+    app.post('/tasks', async(req, res) => {
+      const body = req.body;
+      const result = await taskCollection.insertOne(body);
       res.send(result);
     })
 
